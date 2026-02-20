@@ -13,12 +13,12 @@ public enum TokenType {
     STAR,
 
     //
-    BANG,
-    BANG_EQUAL,
-    EQUAL,
-    EQUAL_EQUAL,
-    GREATER,
-    GREATER_EQUAL,
-    LESS,
-    LESS_EQUAL,
+    BANG, //!
+    BANG_EQUAL, //!=
+    EQUAL, //=
+    EQUAL_EQUAL, // ==
+    GREATER, //>
+    GREATER_EQUAL, //>=
+    LESS, // <
+    LESS_EQUAL, //=<
 }
