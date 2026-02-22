@@ -5,7 +5,7 @@ public class Scanner {
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
 
-    //prvi karakter
+    //pocetak nekog trenutnog tokena
     private int start = 0;
 
     //trenutni karakter
@@ -36,7 +36,9 @@ public class Scanner {
 
     // za tokene koji imaju literal vrednost(mora da se doradi)
     private void addToken(TokenType type, Object literal){
+
         String text = source.substring(start, current);
+
         tokens.add(new Token(type,text,literal,line));
     }
 
@@ -58,8 +60,30 @@ public class Scanner {
             case '+': addToken(TokenType.PLUS); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '*': addToken(TokenType.STAR); break;
+
+            //edge cases u slucajevima da li se navedeni karakteri nalaze jedno do drugog ili su odvojeni razmakom
+            case "!": addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+            case ">": addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.EQUAL);
+            case "<" addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+            case "==" addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+
+            //u slucaju da korisnik u source file ubaci karaktere koje Lox ne koristi
+            // na primer @ # ^S
+            default:
+                Lox.error(line, "Unexpected character");
+                break;
     }
+
 }
+
+    //funkcija za dodatnu proveru da li se neki karakter koji trazimo poklapa sa onim koji je na redu dok se radi skeniranje
+    private boolean match(char expected){
+        if(isAtEnd()) return false;
+        if(source.charAt(current) != expected) return fales;
+
+        current++;
+        return true;
+    }
 
 //putem ove metode prolazimo kroz niz karaktera
 private char advance() {
