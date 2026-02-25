@@ -78,6 +78,7 @@ public class Scanner {
                 line++;
                 break;
 
+
             case '/':
                     if(match('/')){
                         //dok se ne dodje do kraja linije ili fajla, preskaci karaktere
@@ -88,9 +89,15 @@ public class Scanner {
                         addToken(TokenType.SLASH);
                     } break;
 
+
             //u slucaju da korisnik u source file ubaci karaktere koje Lox ne koristi
             // na primer @ # ^S
             default:
+            if (isDigit(c)) {
+                number();
+            } else {
+                Lox.error(line, "Unexpected character.");
+            }
                 Lox.error(line, "Unexpected character");
                 break;
     }
@@ -115,5 +122,33 @@ public class Scanner {
 private char advance() {
     return source.charAt(current++);
 }
+
+//proveravamo da li je karakter cifra
+private boolean isDigit(char c){
+        return c>='0' && c<='9';
+}
+
+//tokenizacija broja
+private void number(){
+        while(isDigit(peek())){
+            advance();
+        }
+
+        if(peek()=='.' && isDigit(peekNext())){
+            advance();
+
+            while(isDigit(peek())){
+                advance();
+            }
+        }
+
+        addToken(TokenType.NUMBER,
+                Double.parseDouble(source.substring(start, current)));
+}
+    //ista funkcionalnost kao peek, samo da se zadrzi na sledecem karakteru
+    private char peekNext() {
+        if (current + 1 >= source.length()) return '\0';
+        return source.charAt(current + 1);
+    }
 
 }
