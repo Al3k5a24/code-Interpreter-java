@@ -64,8 +64,29 @@ public class Scanner {
             //edge cases u slucajevima da li se navedeni karakteri nalaze jedno do drugog ili su odvojeni razmakom
             case "!": addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
             case ">": addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.EQUAL);
-            case "<" addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
-            case "==" addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+            case "<": addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+            case "==": addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+
+            case ' ':
+            case '\r':
+            case '\t':
+                // ignorisanje belih znakova.
+                break;
+
+            //nov red
+            case '\n':
+                line++;
+                break;
+
+            case '/':
+                    if(match('/')){
+                        //dok se ne dodje do kraja linije ili fajla, preskaci karaktere
+                     while(peek() != '\n' && !isAtEnd()){
+                         advance();
+                     }
+                    }else{
+                        addToken(TokenType.SLASH);
+                    } break;
 
             //u slucaju da korisnik u source file ubaci karaktere koje Lox ne koristi
             // na primer @ # ^S
@@ -75,12 +96,17 @@ public class Scanner {
     }
 
 }
+    // gleda "sledeci"(trejutni) karakter i ne pomera se, na kraju fajla  vraca null karakter kako bi izbegli exception
+    private char peek() {
+        if (isAtEnd()) return '\0';
+        return source.charAt(current);
+    }
 
     //funkcija za dodatnu proveru da li se neki karakter koji trazimo poklapa sa onim koji je na redu dok se radi skeniranje
+    //dodatna funkcionalnost je trazenje kombinacija nekih karaktera, na primer za komentar, vece jednako, ...
     private boolean match(char expected){
         if(isAtEnd()) return false;
-        if(source.charAt(current) != expected) return fales;
-
+        if(source.charAt(current) != expected) return false;
         current++;
         return true;
     }
