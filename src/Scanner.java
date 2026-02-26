@@ -8,7 +8,7 @@ public class Scanner {
     //pocetak nekog trenutnog tokena
     private int start = 0;
 
-    //trenutni karakter
+    //pokazivac na sledece karaktere
     private int current = 0;
 
     //linija na kom se nalazi current karakter
@@ -62,10 +62,10 @@ public class Scanner {
             case '*': addToken(TokenType.STAR); break;
 
             //edge cases u slucajevima da li se navedeni karakteri nalaze jedno do drugog ili su odvojeni razmakom
-            case "!": addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
-            case ">": addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.EQUAL);
-            case "<": addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
-            case "==": addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+            case '!': addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+            case '>': addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+            case '<': addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+            case '=': addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
 
             case ' ':
             case '\r':
@@ -102,8 +102,6 @@ public class Scanner {
             else {
                 Lox.error(line, "Unexpected character.");
             }
-                Lox.error(line, "Unexpected character");
-                break;
     }
 
 }
@@ -125,6 +123,11 @@ public class Scanner {
 //putem ove metode prolazimo kroz niz karaktera
 private char advance() {
     return source.charAt(current++);
+
+    //II nacin za implementaciju:
+    //char c = source.chatAt(current);
+    //current++;
+    //return c;
 }
 
 //proveravamo da li je karakter cifra
@@ -158,14 +161,13 @@ private void number(){
 
     private void identifier() {
         while (isAlphaNumeric(peek())) advance();
-
         addToken(IDENTIFIER);
     }
 
     private boolean isAlpha(char c) {
         return (c >= 'a' && c <= 'z') ||
                 (c >= 'A' && c <= 'Z') ||
-                c == '_';
+                c == '_';s
     }
 
     private boolean isAlphaNumeric(char c) {
