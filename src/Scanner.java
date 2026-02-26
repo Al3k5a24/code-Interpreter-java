@@ -85,7 +85,19 @@ public class Scanner {
                      while(peek() != '\n' && !isAtEnd()){
                          advance();
                      }
-                    }else{
+                     // funkcionalnost /*...*/ (rucno implementirano)
+                    }else if(match('*')){
+                        while(!(peek() == '*' && peekNext() =='/') && !isAtEnd()){
+                            advance();
+                        }
+
+                        // citamo "*/"
+                        if (!isAtEnd()) {
+                            advance(); // *
+                            advance(); // /
+                        }
+                    }
+                    else{
                         addToken(TokenType.SLASH);
                     } break;
 
@@ -158,6 +170,7 @@ private void number(){
         return source.charAt(current + 1);
     }
 
+    //proveravamo da li su rezervisane reci
     private void identifier() {
         while (isAlphaNumeric(peek())) advance();
 
@@ -165,8 +178,6 @@ private void number(){
         TokenType type = keywords.get(text);
         if (type == null) type = TokenType.IDENTIFIER;
         addToken(type);
-
-        addToken(TokenType.IDENTIFIER);
     }
 
     private boolean isAlpha(char c) {
