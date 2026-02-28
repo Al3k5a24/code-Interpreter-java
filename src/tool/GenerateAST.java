@@ -13,7 +13,7 @@ public class GenerateAST {
         }
         String outputDir = args[0];
 
-        defineAst(outputDir, "Expr", Arrays.asList(
+        defineAst(outputDir, "TestGen", Arrays.asList(
                 //opis strukture AST-ova koje ce generator napisati u jednom generisanju
                 "Binary   : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
@@ -44,6 +44,7 @@ public class GenerateAST {
 
             //ignorisati ovaj split :, deli isti kod na 2 ista dela
             String fields = type.split(":")[1].trim();
+            defineType(writer, baseName, className, fields);
         }
         writer.println("}");
         writer.close();
@@ -53,7 +54,7 @@ public class GenerateAST {
             PrintWriter writer, String baseName,
             String className, String fieldList){
         //pod-klasa
-        writer.println("  static class"+ className+" extends "+ baseName + " {");
+        writer.println("  static class "+ className+" extends "+ baseName + " {");
 
         String[] fields = fieldList.split(", ");
 
@@ -68,10 +69,9 @@ public class GenerateAST {
         for(String field:fields){
             String name = field.split(" ")[1];
             writer.println("      this." + name + " = " + name + ";");
-
-            writer.println("    }");
         }
 
+        writer.println("  }");
         writer.println("  }");
 
     }
