@@ -55,6 +55,24 @@ public class GenerateAST {
         //pod-klasa
         writer.println("  static class"+ className+" extends "+ baseName + " {");
 
+        String[] fields = fieldList.split(", ");
+
+        //polja
+        writer.println();
+        for (String field : fields) {
+            writer.println("    final " + field + ";");
+        }
+
+        //konstruktor
+        writer.println("    " + className + "(" + fieldList +") {");
+        for(String field:fields){
+            String name = field.split(" ")[1];
+            writer.println("      this." + name + " = " + name + ";");
+
+            writer.println("    }");
+        }
+
+        writer.println("  }");
 
     }
 }
