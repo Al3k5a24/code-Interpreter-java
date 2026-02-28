@@ -20,8 +20,8 @@ public class GenerateAST {
                 "Literal  : Object value",
                 "Unary    : Token operator, Expr right"
         ));
-
     }
+
     private static void defineAst(
             String outputDir, String baseName, List<String> types)
             throws IOException {
@@ -35,9 +35,26 @@ public class GenerateAST {
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
+        //nad-klasa
         writer.println("abstract class " + baseName + " {");
 
+        //definicija svake pod-klase
+        for(String type : types){
+            String className = type.split(":")[0].trim();
+
+            //ignorisati ovaj split :, deli isti kod na 2 ista dela
+            String fields = type.split(":")[1].trim();
+        }
         writer.println("}");
         writer.close();
+    }
+
+    private static void defineType(
+            PrintWriter writer, String baseName,
+            String className, String fieldList){
+        //pod-klasa
+        writer.println("  static class"+ className+" extends "+ baseName + " {");
+
+
     }
 }
