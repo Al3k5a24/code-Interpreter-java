@@ -14,6 +14,7 @@ public class GenerateAST {
         String outputDir = args[0];
 
         defineAst(outputDir, "Expr", Arrays.asList(
+                //opis strukture AST-ova koje ce generator napisati u jednom generisanju
                 "Binary   : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
                 "Literal  : Object value",
@@ -21,13 +22,15 @@ public class GenerateAST {
         ));
 
     }
-
     private static void defineAst(
             String outputDir, String baseName, List<String> types)
             throws IOException {
         String path = outputDir + "/" + baseName + ".java";
+
+        //fajl za pisanje
         PrintWriter writer = new PrintWriter(path, "UTF-8");
 
+        //sadrzaj koji ce biti upisan u fajl koji se kreira
         writer.println("package com.craftinginterpreters.lox;");
         writer.println();
         writer.println("import java.util.List;");
@@ -36,4 +39,5 @@ public class GenerateAST {
 
         writer.println("}");
         writer.close();
+    }
 }
