@@ -1,47 +1,68 @@
-package com.craftinginterpreters.lox;
+package test;
 
 import java.util.List;
 
 abstract class TestGen {
-    static class Binary extends TestGen {
-
-        final Expr left;
-        final Token operator;
-        final Expr right;
-
-        Binary(Expr left, Token operator, Expr right) {
-            this.left = left;
-            this.operator = operator;
-            this.right = right;
-        }
+    interface Visitor<R> {
+    R visitBinaryTestGen(Binary testgen);
+    R visitGroupingTestGen(Grouping testgen);
+    R visitLiteralTestGen(Literal testgen);
+    R visitUnaryTestGen(Unary testgen);
     }
 
-    static class Grouping extends TestGen {
+  abstract <R> R accept(Visitor<R> visitor);
+  static class Binary extends TestGen {
 
-        final Expr expression;
-
-        Grouping(Expr expression) {
-            this.expression = expression;
-        }
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitBinaryTestGen(this);
     }
 
-    static class Literal extends TestGen {
+    final Expr left;
+    final Token operator;
+    final Expr right;
+    Binary(Expr left, Token operator, Expr right) {
+      this.left = left;
+      this.operator = operator;
+      this.right = right;
+  }
+  }
+  static class Grouping extends TestGen {
 
-        final Object value;
-
-        Literal(Object value) {
-            this.value = value;
-        }
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitGroupingTestGen(this);
     }
 
-    static class Unary extends TestGen {
+    final Expr expression;
+    Grouping(Expr expression) {
+      this.expression = expression;
+  }
+  }
+  static class Literal extends TestGen {
 
-        final Token operator;
-        final Expr right;
-
-        Unary(Token operator, Expr right) {
-            this.operator = operator;
-            this.right = right;
-        }
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitLiteralTestGen(this);
     }
+
+    final Object value;
+    Literal(Object value) {
+      this.value = value;
+  }
+  }
+  static class Unary extends TestGen {
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitUnaryTestGen(this);
+    }
+
+    final Token operator;
+    final Expr right;
+    Unary(Token operator, Expr right) {
+      this.operator = operator;
+      this.right = right;
+  }
+  }
 }
