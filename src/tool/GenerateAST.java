@@ -13,7 +13,7 @@ public class GenerateAST {
         }
         String outputDir = args[0];
 
-        defineAst(outputDir, "TestGen", Arrays.asList(
+        defineAst(outputDir, "Expr", Arrays.asList(
                 //opis strukture AST-ova koje ce generator napisati u jednom generisanju
                 "Binary   : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
