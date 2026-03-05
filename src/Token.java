@@ -5,7 +5,7 @@ public class Token {
     //tekst koji cini jedan token, jer lexer cita karakter po karekter
     final String lexeme;
 
-    //arsirana runtime vrednost tog tokena
+    //parsirana runtime vrednost tog tokena
     final Object literal;
 
     final int line;
